@@ -2,7 +2,11 @@ const { Task } = require('../models');
 
 class Controller{
     static showTask(req, res, next){
-        Task.findAll()
+        Task.findAll({
+            where: {
+                UserId: req.user.id
+            }
+        })
             .then(data=>{
                 res.status(200).json(data);
             })

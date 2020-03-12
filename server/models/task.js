@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     category: DataTypes.STRING,
     UserId: DataTypes.INTEGER,
-    category: DataTypes.STRING
+    description: DataTypes.STRING
   }, {});
   Task.associate = function(models) {
     Task.belongsTo(models.User, {foreignKey: 'UserId'});

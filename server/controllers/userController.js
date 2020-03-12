@@ -24,7 +24,12 @@ class Controller{
                 return User.create(dataCreateUser)
             })
             .then(data=>{
-                res.status(201).json(data);
+                let token = jwt.sign({
+                    id: data.id,
+                    email: data.email
+                }, process.env.SECRET)
+
+                res.status(201).json(token);
             })
             .catch(err=>{
                 next(err);
