@@ -97,6 +97,7 @@ let app = new Vue({
             })
                 .then(res=>{
                     this.page = 'main';
+                    this.showData();
                 })
         },
 
