@@ -42,11 +42,11 @@
 ### USER
 | Url        | Method | Description                            |
 | ---------- | ------ | -------------------------------------- |
-| /user/register    | POST  | Menambahkan user baru            |
-| /user/login       | POST  | Melakukan login dan mendaptkan token  |
-| /user/googleSignin | POST  | Melakukan login dengan Google    |
+| /users/register    | POST  | Menambahkan user baru            |
+| /users/login       | POST  | Melakukan login dan mendaptkan token  |
+| /users/googleSignin | POST  | Melakukan login dengan Google    |
 
-### 1. POST / user / register
+### 1. POST /users/register
 
 _Example Input (Request Body):_
 ```javascript
@@ -83,7 +83,7 @@ _Response ERROR (400):_
 }
 ```
 
-### 1. POST / user / login
+### 2. POST /users/login
 
 _Example Input (Request Body):_
 ```javascript
