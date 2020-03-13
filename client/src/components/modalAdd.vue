@@ -42,7 +42,7 @@ export default {
     props: ['showData'],
     data(){
         return {
-            endpoint: 'http://localhost:3000',
+            endpoint: 'https://damp-oasis-32768.herokuapp.com',
             addState: null,
             titleAdd: null,
             descriptionAdd: null

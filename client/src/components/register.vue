@@ -1,7 +1,8 @@
 <template>
     <div class="container" style="text-align: center;">
         <div v-if="dataPage === 'register'">
-            <h1>Register</h1>
+            <h1 style="font-family: monospace; font-size: 8vw">KanBun</h1>
+            <h3>Register</h3>
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
                 <div class="card h-auto m-2 bg-dark" style="opacity: 85%;">
                     <div class="card-body">
@@ -35,12 +36,15 @@ export default {
             emailRegister: null,
             passwordRegister: null,
             passwordConfirmRegister: null,
-            endpoint: 'http://localhost:3000'
+            endpoint: 'https://damp-oasis-32768.herokuapp.com'
         }
     },
     methods: {
         loginPage(){
-            this.$emit('loginPage', 'login')
+            this.$emit('loginPage', 'login');
+            this.emailRegister = null;
+            this.passwordRegister = null;
+            this.passwordConfirmRegister = null;
         },
 
          register(){
@@ -56,6 +60,9 @@ export default {
                     .then(res=>{
                         localStorage.setItem('token', res.data);
                         this.$emit('registerSuccess', 'main');
+                        this.emailRegister = null;
+                        this.passwordRegister = null;
+                        this.passwordConfirmRegister = null;
                     })
             }
         } 

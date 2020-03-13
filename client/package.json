@@ -15,7 +15,9 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.6.1",
     "src": "^1.1.2",
+    "sweetalert2": "^9.10.0",
     "vue": "^2.6.11",
+    "vue-google-oauth2": "^1.4.0",
     "vue-hot-reload-api": "^2.3.4"
   },
   "devDependencies": {

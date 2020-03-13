@@ -13,7 +13,7 @@
         <div v-if="page === 'main'">
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-between bg-dark">
                 <div class="m-1 flex-grow-1 text-center">
-                    <h3 class="p-2" style="color: burlywood;">Kanbun</h3>
+                    <h1 class="text-light" style="font-family: monospace;">KanBun</h1>
                 </div>
                 <div class="p-2 m-1 bd-highlight">
                     <b-button v-b-modal.modal-1 class="btn btn-success">+ Add</b-button>
@@ -26,36 +26,11 @@
 
         <div v-if="page === 'main'" class="container">
             <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
-                <div class="p-2 col-3 m-2 bg-primary text-center rounded" style="height: 100%;">
-                    <div class="bg-primary text-center rounded">
-                        <h5 class="p-2">Backlog<hr></h5>
-                    </div>
-                    <div v-for="task in backlog" :key="task.id">
-                        <Card :task="task" :showData="showData"></Card>
-                    </div>
-                </div>
-                <div class="p-2 col-3 m-2 bg-warning text-center rounded" style="height: 100%;">
-                    <div class="bg-warning text-center rounded">
-                        <h5 class="p-2">Todo<hr></h5>
-                    </div>
-                    <div v-for="task in todo" :key="task.id">
-                        <Card :task="task" :showData="showData"></Card>
-                    </div>
-                </div>
-                <div class="p-2 col-3 m-2 bg-danger text-center rounded" style="height: 100%;">
-                    <div class=" bg-danger text-center rounded">
-                        <h5 class="p-2">Done<hr></h5>
-                    </div>
-                    <div v-for="task in done" :key="task.id">
-                        <Card :task="task" :showData="showData"></Card>
-                    </div>
-                </div>
-                <div class="p-2 col-3 m-2 bg-success text-center rounded" style="height: 100%;">
-                    <div class="bg-success text-center rounded">
-                        <h5 class="p-2">Complete<hr></h5>
-                    </div>
-                    <div v-for="task in complete" :key="task.id">
-                        <Card :task="task" :showData="showData"></Card>
+                <div v-for="category in categories" :key="category.index" :class= category.class style="height: 100%;">   
+                    <h5 class="p-2">{{category.name}}<hr></h5>
+                
+                    <div v-for="task in tasks" :key="task.id">
+                        <Card :task="task" :showData="showData" :category="category.card"></Card>
                     </div>
                 </div>
             </div>
@@ -83,12 +58,32 @@ export default {
         titleAdd: null,
         descriptionAdd: null,
         page: null,
-        backlog: [],
-        todo: [],
-        done: [],
-        complete: [],
-        endpoint: 'http://localhost:3000',
-        tasks: []}
+        tasks: [],
+        endpoint: 'https://damp-oasis-32768.herokuapp.com',
+        tasks: [],
+        categories: [
+            {
+            name: 'Backlog',
+            card: 'backlog',
+            class: 'p-2 col-3 m-2 bg-primary text-center rounded' 
+            },
+            {
+            name: 'Todo',
+            card: 'todo',
+            class: 'p-2 col-3 m-2 bg-warning text-center rounded' 
+            },
+            {
+            name: 'Done',
+            card: 'done',
+            class: 'p-2 col-3 m-2 bg-danger text-center rounded' 
+            },
+            {
+            name: 'Completed',
+            card: 'complete',
+            class: 'p-2 col-3 m-2 bg-success text-center rounded' 
+            },
+        ]
+        }
     },
     created(){
         if(localStorage.getItem('token')) {
@@ -119,6 +114,10 @@ export default {
 
         logout(){
             localStorage.removeItem('token');
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+            console.log('User signed out.');
+            });
             this.page = 'login';
         },
 
@@ -129,22 +128,10 @@ export default {
                 headers: {token: localStorage.getItem('token')}
             })
                 .then(res=>{
-                    this.backlog = [];
-                    this.todo = [];
-                    this.done = [];
-                    this.complete= [];
+                    this.tasks = [];
 
                     res.data.forEach(task => {
-
-                        if(task.category === 'backlog'){
-                            this.backlog.push(task)
-                        }else if(task.category === 'todo'){
-                            this.todo.push(task)
-                        }else if(task.category === 'done'){
-                            this.done.push(task)
-                        }else{
-                            this.complete.push(task)
-                        }
+                        this.tasks.push(task)
                     });
                 })
         }

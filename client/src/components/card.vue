@@ -1,10 +1,12 @@
 <template>
-    <div class="bg-white card-body rounded m-2">
-        <div class="card-body">
-            <h5 class="card-title">{{ task.title }}</h5>
-            <p class="card-text">{{ task.description }}</p>
-            <button @click="deleteData(task.id)" class="btn btn-danger">Delete</button>
-            <button @click="nextStep(task.id, task.category)" class="btn btn-success m-2">Next</button>
+    <div v-if="task.category === category">
+        <div class="bg-white card-body rounded m-2">
+            <div class="card-body">
+                <h5 class="card-title">{{ task.title }}</h5>
+                <p class="card-text">{{ task.description }}</p>
+                <button @click="deleteData(task.id)" class="btn btn-danger">Delete</button>
+                <button @click="nextStep(task.id, task.category)" class="btn btn-success m-2">Next</button>
+            </div>
         </div>
     </div>
 </template>
@@ -12,10 +14,10 @@
 import axios from 'axios';
 
 export default {
-    props: ['task', 'showData'],
+    props: ['task', 'showData', 'category'],
     data(){
         return {
-            endpoint: 'http://localhost:3000'
+            endpoint: 'https://damp-oasis-32768.herokuapp.com'
         }
     },
     methods: {
