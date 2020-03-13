@@ -35,7 +35,7 @@
             ></b-form-input>
             </b-form-group>
         </form>
-        </b-modal>
+    </b-modal>
 </template>
 <script>
 export default {

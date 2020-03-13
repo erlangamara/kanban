@@ -1,5 +1,9 @@
 # kanban
 
+# Deploy Link
+
+    https://kanban-1584035163065.firebaseapp.com/
+
 # Third Party
 
     Google OAUTH

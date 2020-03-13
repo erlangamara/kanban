@@ -13949,17 +13949,17 @@ exports.default = _default;
                               on: { click: _vm.registerPage }
                             },
                             [_vm._v("Register")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-secondary m-2",
-                              on: { click: _vm.loginGoogle }
-                            },
-                            [_vm._v("Sign in with Google")]
                           )
                         ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-secondary m-2",
+                          on: { click: _vm.loginGoogle }
+                        },
+                        [_vm._v("Sign in with Google")]
                       )
                     ])
                   ]
@@ -14024,16 +14024,102 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   props: ['task', 'showData', 'category'],
   data: function data() {
     return {
-      endpoint: 'https://damp-oasis-32768.herokuapp.com'
+      endpoint: 'https://damp-oasis-32768.herokuapp.com',
+      editState: null,
+      title: this.task.title,
+      description: this.task.description,
+      id: this.task.id
     };
   },
   methods: {
-    deleteData: function deleteData(id) {
+    checkFormValidity: function checkFormValidity() {
+      var valid = this.$refs.form.checkValidity();
+      this.editState = valid;
+      return valid;
+    },
+    resetModal: function resetModal() {
+      this.titleAdd = '';
+      this.descriptionAdd = '';
+      this.editState = null;
+    },
+    handleOk: function handleOk(bvModalEvt) {
+      bvModalEvt.preventDefault();
+      this.editData();
+    },
+    editData: function editData() {
       var _this = this;
+
+      if (!this.checkFormValidity()) {
+        return;
+      }
+
+      (0, _axios.default)({
+        method: 'put',
+        url: "".concat(this.endpoint, "/tasks/").concat(this.id),
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        data: {
+          title: this.title,
+          description: this.description
+        }
+      }).then(function (res) {
+        _this.showData();
+      });
+      this.$nextTick(function () {
+        _this.$bvModal.hide('modal-2');
+      });
+    },
+    deleteData: function deleteData(id) {
+      var _this2 = this;
 
       (0, _axios.default)({
         method: 'delete',
@@ -14042,11 +14128,11 @@ var _default = {
           token: localStorage.getItem('token')
         }
       }).then(function (res) {
-        _this.showData();
+        _this2.showData();
       });
     },
     nextStep: function nextStep(id, category) {
-      var _this2 = this;
+      var _this3 = this;
 
       var newCategory;
 
@@ -14070,7 +14156,7 @@ var _default = {
           category: newCategory
         }
       }).then(function (res) {
-        _this2.showData();
+        _this3.showData();
       });
     }
   }
@@ -14089,45 +14175,152 @@ exports.default = _default;
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _vm.task.category === _vm.category
-    ? _c("div", [
-        _c("div", { staticClass: "bg-white card-body rounded m-2" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("h5", { staticClass: "card-title" }, [
-              _vm._v(_vm._s(_vm.task.title))
-            ]),
-            _vm._v(" "),
-            _c("p", { staticClass: "card-text" }, [
-              _vm._v(_vm._s(_vm.task.description))
-            ]),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-danger",
-                on: {
-                  click: function($event) {
-                    return _vm.deleteData(_vm.task.id)
+    ? _c(
+        "div",
+        [
+          _c(
+            "b-modal",
+            {
+              ref: "modal",
+              attrs: { id: "modal-2", title: "View task" },
+              on: {
+                show: _vm.resetModal,
+                hidden: _vm.resetModal,
+                ok: _vm.handleOk
+              }
+            },
+            [
+              _c(
+                "form",
+                {
+                  ref: "form",
+                  on: {
+                    submit: function($event) {
+                      $event.stopPropagation()
+                      $event.preventDefault()
+                      return _vm.editData($event)
+                    }
                   }
-                }
-              },
-              [_vm._v("Delete")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-success m-2",
-                on: {
-                  click: function($event) {
-                    return _vm.nextStep(_vm.task.id, _vm.task.category)
+                },
+                [
+                  _c(
+                    "b-form-group",
+                    {
+                      attrs: {
+                        state: _vm.editState,
+                        label: "Title",
+                        "label-for": "title-input",
+                        "invalid-feedback": "Title is required"
+                      }
+                    },
+                    [
+                      _c("b-form-input", {
+                        attrs: {
+                          id: "title-input",
+                          state: _vm.editState,
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.title,
+                          callback: function($$v) {
+                            _vm.title = $$v
+                          },
+                          expression: "title"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-form-group",
+                    {
+                      attrs: {
+                        state: _vm.editState,
+                        label: "Description",
+                        "label-for": "description-input",
+                        "invalid-feedback": "Description is required"
+                      }
+                    },
+                    [
+                      _c("b-form-input", {
+                        attrs: {
+                          id: "description-input",
+                          state: _vm.editState,
+                          required: ""
+                        },
+                        model: {
+                          value: _vm.description,
+                          callback: function($$v) {
+                            _vm.description = $$v
+                          },
+                          expression: "description"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "bg-white card-body rounded m-2" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("h5", { staticClass: "card-title" }, [
+                _vm._v(_vm._s(_vm.task.title))
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(_vm._s(_vm.task.description))
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  directives: [
+                    {
+                      name: "b-modal",
+                      rawName: "v-b-modal.modal-2",
+                      modifiers: { "modal-2": true }
+                    }
+                  ],
+                  staticClass: "btn btn-info"
+                },
+                [_vm._v("View")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger",
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteData(_vm.task.id)
+                    }
                   }
-                }
-              },
-              [_vm._v("Next")]
-            )
+                },
+                [_vm._v("Delete")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success m-2",
+                  on: {
+                    click: function($event) {
+                      return _vm.nextStep(_vm.task.id, _vm.task.category)
+                    }
+                  }
+                },
+                [_vm._v("Next")]
+              )
+            ])
           ])
-        ])
-      ])
+        ],
+        1
+      )
     : _vm._e()
 }
 var staticRenderFns = []
@@ -59217,7 +59410,7 @@ var _vueGoogleOauth = _interopRequireDefault(require("vue-google-oauth2"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var gauthOption = {
-  clientId: '510712711305-67st2t8jhqjulij2cobkng770gei7t4t.apps.googleusercontent.com',
+  clientId: '224061374280-0o1cr1rf7d21s95nkflc34lpt7hpu8j4.apps.googleusercontent.com',
   scope: 'profile email',
   prompt: 'select_account'
 };
@@ -59261,7 +59454,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59409" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64212" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
